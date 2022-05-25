@@ -1,0 +1,2 @@
+# atmoambience-station
+Atmoambience Station is a dynamic, adaptive, site-sensitive, weather-driven sound installation that turns data into music. Using analog and digital sensors connected to a Raspberry Pi, it measures local conditions like temperature, humidity, air pressure, and wind speed. Once collected, this data is analyzed by a Python program and fed into Sonic Pi, a code-based music creation and performance tool. Using a timed loop of data collection, analysis, and signal sending, Atmoambience station creates 1440 unique minutes of music each day. 
