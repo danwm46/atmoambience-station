@@ -66,7 +66,8 @@ density_check = RangeDict({range(994,1005) : '/dense3', range(1004,1014) : '/den
 resonance_check = RangeDict({range(0,35) : 0, range(34,50) : 0.15, range(49,60) : 0.3,
                 range(59,68) : 0.45, range(67,80) : 0.6, range(79,100) : 0.75})
 
-
+synth_check = RangeDict({range(-5, 9) : '/synth_low', range(9, 24) : '/synth_mid',
+                range(23, 51) : '/synth_hi'})
 
 #main_pads = ['/copland', '/mincopland']
 ornaments = ['/piano', '/brit', '/chirp', '/riff', '/melody', 'null'] #'/riff',
@@ -160,6 +161,7 @@ def timed_loop(sc):
     print("rain check!", rain)
     print("wind check!", wind)
     print("humidity check!", humidity)
+    print("synth check!", synth_check[key])
     print("pad check!")
     if air_pr > 1013:
         if air_pr > 1022:
@@ -187,7 +189,7 @@ def timed_loop(sc):
     if day == True:
         sender.send_message('/key', [key_check[key]])
         sender.send_message('/key2', [(key_check[key2])-12])
-        sender.send_message('/key3', [(key_check[key3])])
+        sender.send_message('/key3', [(key_check[key3])+12])
         sender.send_message('/tempo', tempo_check[key])
     else:
         sender.send_message('/key', [(key_check[key]-12)])
@@ -198,6 +200,7 @@ def timed_loop(sc):
     sender.send_message('/tempo', tempo_check[key])
     sender.send_message(tonality_check[air_pr], 1)
     sender.send_message(density_check[air_pr], 1)
+    sender.send_message(synth_check[key], 1)
     sender.send_message('/reverb', reverb_check[key])
     sender.send_message('/flanger', flanger_check[wind])
     sender.send_message('/resonance', resonance_check[humidity])

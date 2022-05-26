@@ -12,6 +12,7 @@ key2 = get[:key2] # pulls pitch center #2 value from external python program
 key3 = get[:key3] # pulls pitch center #3 value from external python program
 k = key1 # sets pitch center #1 to independent variable
 k2 = key2 # sets pitch center #2 to independent variable
+#k3 = key1 + 12
 k3 = key3 # sets pitch center #3 to independent variable
 
 set :blips, (ring k+4, k+7, k+12, k+14, k+19, k+23) # pitches for pad A
@@ -26,6 +27,9 @@ set :reverb, 0
 set :cutoff, 131
 set :resonance, 0
 set :density, (ring 4, 1, 1, 3, 9) # adsr
+
+set :synths, [:hollow, :growl, :pretty_bell, :prophet, :kalimba,
+                :mod_beep, :subpulse, :blade, :sine]
 
 set :notes, (ring k+9,k+11,k+12,k+14,k+16,k+17,k+19,k+21,k+23,k+24,:r) # pitches for synth lead
 set :chrdrsts, [6, 5, 3, 2] # durations for harmonies
@@ -81,7 +85,7 @@ live_loop :tonality0 do # sets pitches to pent
   set :blips, (ring k+4, k+7, k+12, k+14, k+19, k+21)
   set :dings, (ring k2-5, k2-3, k2+2, k2+4, k2+7) #k2+7, k2+9, k2+11, k2+14, k2+16, k2+19)
   set :plucks, (ring k2+24, k2+26, k2+28, k2+31, k2+33, k2+36)
-  set :low, (ring k3-12, k3-7, k3-5, k3) #k-24, k-22,k-20,k-19,k-17,k-15,k-12,k-13,k-24,k-19,k-17,k-12
+  set :low, (ring k-12, k-7, k-5, k) #k-24, k-22,k-20,k-19,k-17,k-15,k-12,k-13,k-24,k-19,k-17,k-12
   set :rplucks, (ring k2+24, :r, k2+26, :r, k2+28, :r, k2+31, :r, k2+33, :r, k2+36, :r)
   set :notes, (ring k+9,k+12,k+14,k+16,k+19,k+21,k+24,:r)
   set :chrdz, (ring k-10, k-8, k-5, k-5, k-3, k-3, k, k, k+2, k+4, k+7, k+9, k+12, k+14)
@@ -93,7 +97,7 @@ live_loop :tonality1 do # sets pitches to maj
   set :blips, (ring k+4, k+7, k+12, k+14, k+19, k+23)
   set :dings, (ring k2-5, k2-3, k2+2, k2+4, k2+7) #k2+7, k2+9, k2+11, k2+14, k2+16, k2+19
   set :plucks, (ring k2+24, k2+26, k2+28, k2+31, k2+33, k2+35)
-  set :low, (ring k3-24,k3-19,k3-17,k3-12, k3-7, k3-5, k3) #k-24, k-22,k-20,k-19,k-17,k-15,k-12,k-13,k-24,k-19,k-17,k-12
+  set :low, (ring k-24,k-19,k-17,k-12, k-7, k-5, k) #k-24, k-22,k-20,k-19,k-17,k-15,k-12,k-13,k-24,k-19,k-17,k-12
   set :rplucks, (ring k2+24, :r, k2+26, :r, k2+28, :r, k2+31, :r, k2+33, :r, k2+35, :r)
   set :notes, (ring k+9,k+12,k+14,k+16,k+19,k+21,k+24,:r)
   set :chrdz, (ring k-10, k-8, k-7, k-5, k-4, k-3, k-1, k, k+2, k+4, k+7, k+9, k+12, k+14)
@@ -105,11 +109,33 @@ live_loop :tonality2 do # sets pitches to min
   set :blips, (ring k+3, k+7, k+12, k+14, k+19, k+22)
   set :dings, (ring k2-5, k2-4, k2+2, k2+3, k2+5) #k2+7, k2+8, k2+10, k2+14, k2+15, k2+19
   set :plucks, (ring k2+24, k2+26, k2+27, k2+31, k2+32, k2+34)
-  set :low, (ring k3-24, k3-22,k3-21,k3-19,k3-17,k3-16,k3-14,k3-12,k3-24,k3-19,k3-17,k3-12)
+  set :low, (ring k-24, k-22,k-21,k-19,k-17,k-16,k-14,k-12,k-24,k-19,k-17,k-12)
   set :rplucks, (ring k2+24, :r, k2+26, :r, k2+27, :r, k2+31, :r, k2+32, :r, k2+34, :r, :r)
   set :notes, (ring k+8,k+11,k+12,k+14,k+15,k+16,k+17,k+19,k+20,k+21,k+23,k+24,:r)
   set :chrdz, (ring k-10, k-9, k-7, k-5, k-4, k-4, k-2, k, k+2, k+3, k+7, k+8, k+12, k+14)
 end
+
+live_loop :synths_low do
+  use_real_time
+  val = sync "/osc*/synth_low"
+  set :synths, [:pluck, :dark_ambience, :blade, :piano, :kalimba,
+                  :mod_beep, :subpulse, :pluck, :sine]
+end
+
+live_loop :synths_mid do
+  use_real_time
+  val = sync "/osc*/synth_mid"
+  set :synths, [:hollow, :growl, :pretty_bell, :prophet, :kalimba,
+                  :mod_beep, :subpulse, :blade, :sine]
+end
+
+live_loop :synths_hi do
+  use_real_time
+  val = sync "/osc*/synth_hi"
+  set :synths, [:hollow, :growl, :pretty_bell, :prophet, :kalimba,
+                  :chiplead, :hoover, :blade, :subpulse]
+end
+
 
 live_loop :pressure_density0 do # sets adsr to widest
   use_real_time
@@ -310,11 +336,12 @@ end
 define :do_piano_plucks do
   set :kill0,false
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
   rvb = get[:reverb]
   ctf = get[:cutoff]
   rzz = get[:resonance]
-  use_synth :hollow
+  use_synth synth[0] #:hollow
   with_fx :reverb, room: rvb do
     with_fx :echo do
       with_fx :rlpf, cutoff: ctf, res: rzz do
@@ -332,12 +359,12 @@ define :do_piano_plucks do
                   set :kill0,true #set kill1 flag true
                   stop # quit loop
                 end
-                sleep 0.25 #time between checks for button up cue
+                sleep 1 #time between checks for button up cue
               end
             end
             4.times do
               s0
-              sleep 0.25
+              sleep 1
               stop if get(:kill0)
             end
           end
@@ -350,9 +377,10 @@ end #of function
 define :do_copland_pad do
   set :kill1,false
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
   live_loop :control_copland_pad do
-    use_synth [:growl, :dark_ambience].choose
+    use_synth synth[1]#[:growl, :dark_ambience].choose
     fl=get[:flanger]
     ctf = get[:cutoff]
     rzz = get[:resonance]
@@ -426,8 +454,8 @@ define :do_harmoniesAlt do
     rzz = get[:resonance]
     with_fx :rlpf, cutoff: ctf, res: rzz do
       with_fx :flanger, mix: fl, phase: 0.75 do
-        with_fx :compressor, amp: 0.8 do
-          with_fx :hpf, cutoff: 70 do
+        with_fx :compressor, amp: 0.4 do
+          with_fx :hpf, cutoff: 50 do
             with_fx :reverb, mix: 0.6, room: 0.8 do
               harmoniesAlt
               in_thread do
@@ -454,9 +482,10 @@ end
 define :do_bell_pad do
   set :kill11, false
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
   live_loop :control_bell_pad do
-    use_synth [:pretty_bell, :blade].choose
+    use_synth synth[2]
     fl=get[:flanger]
     ctf = get[:cutoff]
     rzz = get[:resonance]
@@ -490,8 +519,9 @@ end
 define :do_bass_loop do
   set :kill2, false
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
-  use_synth :prophet
+  use_synth synth[3]
   live_loop :control_bass_loop do
     bass = get[:low]
     s4 = play bass.choose, amp: 0.2, attack: 2, decay: 6, sustain: 2, cutoff: 65, res: 0.6
@@ -578,7 +608,7 @@ define :do_chirp_run do
             1.times do
               chirp_run
               #s3
-              sleep 0.5
+              sleep 1
               stop if get(:kill5)
             end
           end
@@ -614,7 +644,7 @@ define :do_min_chirp_run do
             1.times do
               min_chirp_run
               #s3
-              sleep 0.5
+              sleep 1
               stop if get(:kill55)
             end
           end
@@ -730,56 +760,63 @@ end
 
 define :chirp_run do
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
-  use_synth :kalimba
-  play k, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  play k+2, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  play k+4, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  play k+7, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  sleep 4
-  play k+14, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  play k+16, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  play k+19, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
-  play k+21, amp: 1, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
-  sleep 1
+  use_synth synth[4]
+  1.times do
+    play k, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    play k+2, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    play k+4, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    play k+7, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    sleep 4
+    play k+14, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    play k+16, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    play k+19, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+    play k+21, amp: 0.5, sustain: 0.5, cutoff: 100, res: 0.5, detune: 12
+    sleep 1
+  end
   sleep 8
 end
 
 define :min_chirp_run do
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
-  use_synth :kalimba
-  play k, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  play k+2, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  play k+3, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  play k+7, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  sleep 4
-  play k+14, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  play k+15, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  play k+19, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
-  play k+20, amp: 1, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
-  sleep 1
+  use_synth synth[4]
+  1.times do
+    play k, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    play k+2, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    play k+3, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    play k+7, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    sleep 4
+    play k+14, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    play k+15, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    play k+19, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+    play k+20, amp: 0.5, sustain: 0.5, cutoff: 70, res: 0.5, detune: 12
+    sleep 1
+  end
   sleep 8
 end
 
 define :brit_pluck do
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
-  use_synth :hollow
+  use_synth synth[0]
   pl = (p.choose)
   play pl, release: 0.75
   sleep 0.5
@@ -789,12 +826,13 @@ end
 
 define :brit_riff do
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
   key1 = get[:key]
   key2 = get[:key2]
   k = key1
   k2 = key2
-  use_synth :mod_beep
+  use_synth synth[5]
   1.times do
     play k2, amp: 0.125, release: 1.5, mod_phase: 1.5, mod_range: 12, cutoff: 70
     sleep 2
@@ -819,12 +857,13 @@ end
 
 define :min_brit_riff do
   tempo = get[:tempo]
+  synth = get[:synths]
   use_bpm tempo
   key1 = get[:key]
   key2 = get[:key2]
   k = key1
   k2 = key2
-  use_synth :mod_beep
+  use_synth synth[5]
   1.times do
     play k2, amp: 0.125, release: 1.5, mod_phase: 1.5, mod_range: 12, cutoff: 70
     sleep 2
@@ -848,7 +887,8 @@ define :min_brit_riff do
 end
 
 define :melody do
-  use_synth :blade
+  synth = get[:synths]
+  use_synth synth[7]
   pitches = get[:notes]
   z = shuffle pitches
   durz = [1,1,1,1,2,2,2,3,3,4,5,6]
@@ -863,7 +903,8 @@ define :melody do
 end
 
 define :harmonies do
-  use_synth [:subpulse, :hoover].choose
+  synth = get[:synths]
+  use_synth synth[6]
   susus = get[:chrdrsts]
   grrr = shuffle susus
   print grrr
@@ -880,7 +921,8 @@ define :harmonies do
 end
 
 define :harmoniesAlt do
-  use_synth :sine #:subpulse # :hoover
+  synth = get[:synths]
+  use_synth synth[8]
   susus = get[:chrdrsts]
   grrr = shuffle susus
   print grrr
